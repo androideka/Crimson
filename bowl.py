@@ -29,7 +29,13 @@ class Bowl(object):
         else:
             pins_left = 10
 
-        # Spare
+        current_frame_score.append(pins_left - pin_count)
+        if not pin_count or len(current_frame_score) == 2:
+            self.frame += 1
+            self.frame_scores[self.frame] = []
+            self.score.append(sum(current_frame_score))
+
+        # Spare or strike
         if self.frame > 1:
             last_frame = self.frame_scores[self.frame - 1]
             if sum(last_frame) == 10 and len(last_frame) > 1 and len(self.frame_scores[self.frame]) == 1:
@@ -37,13 +43,11 @@ class Bowl(object):
         if self.frame > 2:
             if self.frame_scores[self.frame - 2] == [10]:
                 print 'strike'
-                #self.score[self.frame - 2]
-
-        current_frame_score.append(pins_left - pin_count)
-        if not pin_count or len(current_frame_score) == 2:
-            self.frame += 1
-            self.frame_scores[self.frame] = []
-            self.score.append(sum(current_frame_score))
+                if len(self.frame_scores[self.frame - 2]) == 2:
+                    self.score[self.frame - 3] += sum(self.frame_scores[self.frame - 2])
+                else:
+                    self.score[self.frame - 3] += sum(self.frame_scores[self.frame - 2]) \
+                        + sum(self.frame_scores[self.frame - 1])
 
         print self.frame_scores
         print 'Score:' + str(self.score)
@@ -51,14 +55,20 @@ class Bowl(object):
     def total_score(self):
         return sum(self.score)
 
+
 bob = Bowl('Bob')
+bob.bowl(2)
 bob.bowl(1)
-bob.bowl(0)
 bob.bowl(3)
 bob.bowl(2)
 bob.bowl(1)
 bob.bowl(0)
+bob.bowl(9)
 bob.bowl(0)
 bob.bowl(0)
+bob.bowl(4)
+bob.bowl(2)
+bob.bowl(1)
+bob.bowl(1)
 print bob.total_score()
 
