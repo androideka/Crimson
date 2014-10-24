@@ -23,7 +23,6 @@ class Bowler(object):
         if len(frame) == 2 or sum(frame) == 10:
             self.advance_frame()
 
-        print 'Current frame: ' + str(self.current_frame)
         print 'Frame scores: ' + str(self.frames)
         print 'Score: ' + str(self.score)
 
@@ -37,13 +36,12 @@ class Bowler(object):
 
     def check_strike_or_spare(self):
         for frame, frame_score in self.frames.iteritems():
+            # Check whether frame is not open
             if sum(frame_score) == 10 and len(self.score) > frame and self.score[frame] <= 10:
                 if len(frame_score) == 1 and len(self.score) > 2:
                     # Strike
                     if frame == len(self.frames) - 2 or frame > 8:
-                        print frame
                         break
-                    print 'Strike!'
                     if len(self.frames[frame + 1]) == 2:
                         self.score[frame] += sum(self.frames[frame + 1])
                     else:
@@ -51,7 +49,6 @@ class Bowler(object):
 
                 elif len(frame_score) != 1:
                     # Spare
-                    print 'Spare!'
                     self.score[frame] += self.frames[frame + 1][0]
 
     def get_current_frame(self):
@@ -70,16 +67,14 @@ class Bowler(object):
 
 
 bob = Bowler("Bob")
+bob.bowl(5)
 bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
+bob.bowl(10)
+bob.bowl(10)
+bob.bowl(10)
+bob.bowl(10)
+bob.bowl(10)
+bob.bowl(10)
+bob.bowl(10)
+bob.bowl(10)
 print bob.get_total_score()
