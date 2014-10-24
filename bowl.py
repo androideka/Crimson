@@ -1,6 +1,7 @@
 __author__ = 'androideka'
 
-import PySide
+from PySide import *
+
 
 class Bowl(object):
 
