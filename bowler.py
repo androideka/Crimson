@@ -40,8 +40,14 @@ class Bowler(object):
             if sum(frame_score) == 10 and len(self.score) > frame and self.score[frame] <= 10:
                 if len(frame_score) == 1 and len(self.score) > 2:
                     # Strike
+                    if frame == len(self.frames) - 2:
+                        break
                     print 'Strike!'
-                    
+                    if len(self.frames[frame + 1]) == 2:
+                        self.score[frame] += sum(self.frames[frame + 1])
+                    else:
+                        self.score[frame] += self.frames[frame + 1][0] + self.frames[frame + 2][0]
+
                 elif len(frame_score) != 1:
                     # Spare
                     print 'Spare!'
@@ -57,14 +63,22 @@ class Bowler(object):
 
 
 bob = Bowler("Bob")
+bob.bowl(9)
+bob.bowl(3)
+bob.bowl(5)
+bob.bowl(0)
+bob.bowl(6)
+bob.bowl(2)
 bob.bowl(0)
 bob.bowl(0)
 bob.bowl(0)
+bob.bowl(7)
+bob.bowl(3)
+bob.bowl(2)
 bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(0)
+bob.bowl(5)
+bob.bowl(2)
+bob.bowl(6)
+bob.bowl(6)
+bob.bowl(10)
+bob.bowl(10)
