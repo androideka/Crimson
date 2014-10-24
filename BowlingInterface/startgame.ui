@@ -16,10 +16,10 @@
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>0</x>
      <y>60</y>
      <width>381</width>
-     <height>221</height>
+     <height>171</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout"/>
@@ -41,6 +41,25 @@
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_3">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>240</y>
+     <width>321</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <item>
+     <widget class="QPushButton" name="start_game">
+      <property name="text">
+       <string>Let's Bowl!</string>
       </property>
      </widget>
     </item>
