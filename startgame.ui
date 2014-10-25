@@ -89,7 +89,11 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="player_name">
+        <property name="clearButtonEnabled">
+         <bool>false</bool>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="horizontalSpacer">
@@ -106,6 +110,12 @@
       </item>
       <item>
        <widget class="QPushButton" name="add_new_bowler">
+        <property name="minimumSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
         <property name="text">
          <string>Add New Bowler</string>
         </property>

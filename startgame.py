@@ -7,7 +7,12 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+import sys
 from PySide import QtCore, QtGui
+from bowler import Bowler
+import mainwindow
+import bowler_score
+
 
 class Ui_StartGame(object):
     def setupUi(self, StartGame):
@@ -63,10 +68,50 @@ class Ui_StartGame(object):
         self.retranslateUi(StartGame)
         QtCore.QMetaObject.connectSlotsByName(StartGame)
 
+        QtGui.QWidget.connect(self.add_new_bowler, QtCore.SIGNAL("pressed()"),
+                              self.add_bowler)
+        self.player_list.addItem("Matt")
+        QtGui.QWidget.connect(self.start_game, QtCore.SIGNAL("pressed()"),
+                              self.launch_main)
+
+    def add_bowler(self):
+        name = self.lineEdit.text()
+        if name:
+            self.player_list.addItem(name)
+        self.lineEdit.clear()
+
+    def launch_main(self):
+        bowlers = []
+        for i in range(self.player_list.count()):
+            bowler = Bowler(self.player_list.item(i))
+            bowlers.append(bowler)
+            self.verticalLayout.addWidget(QtGui.QWidget(), 0, QtCore.QAlignment(0))
+        main.show()
+
     def retranslateUi(self, StartGame):
-        StartGame.setWindowTitle(QtGui.QApplication.translate("StartGame", "Form", None, QtGui.QApplication.UnicodeUTF8))
+        StartGame.setWindowTitle(QtGui.QApplication.translate("StartGame", "Crimson Application", None, QtGui.QApplication.UnicodeUTF8))
         self.welcome.setText(QtGui.QApplication.translate("StartGame", "Welcome to Matt\'s resume!", None, QtGui.QApplication.UnicodeUTF8))
         self.start_game.setText(QtGui.QApplication.translate("StartGame", "Let\'s Bowl!", None, QtGui.QApplication.UnicodeUTF8))
         self.label_add_player.setText(QtGui.QApplication.translate("StartGame", "Enter Player Names Below:", None, QtGui.QApplication.UnicodeUTF8))
         self.add_new_bowler.setText(QtGui.QApplication.translate("StartGame", "Add New Bowler", None, QtGui.QApplication.UnicodeUTF8))
 
+
+class ControlStartWidget(QtGui.QMainWindow):
+    def __init__(self, parent=None):
+        super(ControlStartWidget, self).__init__(parent)
+        self.ui = Ui_StartGame()
+        self.ui.setupUi(self)
+
+
+class ControlMainWindow(QtGui.QMainWindow):
+    def __init__(self, parent=None):
+        super(ControlMainWindow, self).__init__(parent)
+        self.ui = mainwindow.Ui_MainWindow()
+        self.ui.setupUi(self)
+
+if __name__ == "__main__":
+    app = QtGui.QApplication(sys.argv)
+    intro = ControlStartWidget()
+    intro.show()
+    main = ControlMainWindow()
+    sys.exit(app.exec_())

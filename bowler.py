@@ -29,7 +29,7 @@ class Bowler(object):
     def advance_frame(self):
         if self.score:
             self.check_strike_or_spare()
-        if len(self.frames):
+        if len(self.frames) > 1:
             self.score.append(sum(self.get_current_frame()))
         self.current_frame += 1
         self.frames[self.current_frame] = []
@@ -64,17 +64,3 @@ class Bowler(object):
 
     def get_name(self):
         return self.name
-
-
-bob = Bowler("Bob")
-bob.bowl(5)
-bob.bowl(0)
-bob.bowl(10)
-bob.bowl(10)
-bob.bowl(10)
-bob.bowl(10)
-bob.bowl(10)
-bob.bowl(10)
-bob.bowl(10)
-bob.bowl(10)
-print bob.get_total_score()

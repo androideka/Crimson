@@ -56,20 +56,3 @@ class Bowl(object):
     def total_score(self):
         return sum(self.score)
 
-
-bob = Bowl('Bob')
-bob.bowl(2)
-bob.bowl(1)
-bob.bowl(3)
-bob.bowl(2)
-bob.bowl(1)
-bob.bowl(0)
-bob.bowl(9)
-bob.bowl(0)
-bob.bowl(0)
-bob.bowl(4)
-bob.bowl(2)
-bob.bowl(1)
-bob.bowl(1)
-print bob.total_score()
-
