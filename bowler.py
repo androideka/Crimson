@@ -21,10 +21,9 @@ class Bowler(object):
         self.frames[self.current_frame].append(pin_count - pins_left)
         frame = self.frames[self.current_frame]
         if len(frame) == 2 or sum(frame) == 10:
-            self.advance_frame()
-
-        print 'Frame scores: ' + str(self.frames)
-        print 'Score: ' + str(self.score)
+            return self.advance_frame()
+        else:
+            return False
 
     def advance_frame(self):
         if self.score:
@@ -33,6 +32,7 @@ class Bowler(object):
             self.score.append(sum(self.get_current_frame()))
         self.current_frame += 1
         self.frames[self.current_frame] = []
+        return True
 
     def check_strike_or_spare(self):
         for frame, frame_score in self.frames.iteritems():
@@ -64,3 +64,9 @@ class Bowler(object):
 
     def get_name(self):
         return self.name
+
+    def get_score(self):
+        return self.score
+
+    def get_frame_scores(self):
+        return self.frames

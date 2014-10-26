@@ -15,6 +15,7 @@ import bowler_score
 
 
 class Ui_StartGame(object):
+
     def setupUi(self, StartGame):
         StartGame.setObjectName("StartGame")
         StartGame.resize(400, 300)
@@ -34,9 +35,9 @@ class Ui_StartGame(object):
         self.horizontalLayout_3 = QtGui.QHBoxLayout(self.horizontalLayoutWidget_3)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.start_game = QtGui.QPushButton(self.horizontalLayoutWidget_3)
-        self.start_game.setObjectName("start_game")
-        self.horizontalLayout_3.addWidget(self.start_game)
+        self.button_start_game = QtGui.QPushButton(self.horizontalLayoutWidget_3)
+        self.button_start_game.setObjectName("button_start_game")
+        self.horizontalLayout_3.addWidget(self.button_start_game)
         self.verticalLayoutWidget = QtGui.QWidget(StartGame)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 60, 361, 171))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
@@ -50,14 +51,15 @@ class Ui_StartGame(object):
         self.horizontalLayout_6.setSizeConstraint(QtGui.QLayout.SetFixedSize)
         self.horizontalLayout_6.setContentsMargins(5, 5, 5, 5)
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        self.lineEdit = QtGui.QLineEdit(self.verticalLayoutWidget)
-        self.lineEdit.setObjectName("lineEdit")
-        self.horizontalLayout_6.addWidget(self.lineEdit)
+        self.player_name = QtGui.QLineEdit(self.verticalLayoutWidget)
+        self.player_name.setObjectName("player_name")
+        self.horizontalLayout_6.addWidget(self.player_name)
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_6.addItem(spacerItem)
-        self.add_new_bowler = QtGui.QPushButton(self.verticalLayoutWidget)
-        self.add_new_bowler.setObjectName("add_new_bowler")
-        self.horizontalLayout_6.addWidget(self.add_new_bowler)
+        self.button_add_new_bowler = QtGui.QPushButton(self.verticalLayoutWidget)
+        self.button_add_new_bowler.setMinimumSize(QtCore.QSize(20, 20))
+        self.button_add_new_bowler.setObjectName("button_add_new_bowler")
+        self.horizontalLayout_6.addWidget(self.button_add_new_bowler)
         self.verticalLayout.addLayout(self.horizontalLayout_6)
         self.player_list = QtGui.QListWidget(self.verticalLayoutWidget)
         self.player_list.setObjectName("player_list")
@@ -68,32 +70,39 @@ class Ui_StartGame(object):
         self.retranslateUi(StartGame)
         QtCore.QMetaObject.connectSlotsByName(StartGame)
 
-        QtGui.QWidget.connect(self.add_new_bowler, QtCore.SIGNAL("pressed()"),
+        QtGui.QWidget.connect(self.button_add_new_bowler, QtCore.SIGNAL("pressed()"),
                               self.add_bowler)
         self.player_list.addItem("Matt")
-        QtGui.QWidget.connect(self.start_game, QtCore.SIGNAL("pressed()"),
-                              self.launch_main)
+        QtGui.QWidget.connect(self.button_start_game, QtCore.SIGNAL("pressed()"),
+                              self.launch_mainapp)
+
+        QtGui.QWidget.connect(mainapp.ui.button_bowl, QtCore.SIGNAL("pressed()"),
+                              ControlMainWindow.bowl())
 
     def add_bowler(self):
-        name = self.lineEdit.text()
+        name = self.player_name.text()
         if name:
             self.player_list.addItem(name)
-        self.lineEdit.clear()
+        bowler = Bowler(self.player_name.text())
+        self.bowlers.append(bowler)
+        self.player_name.clear()
 
-    def launch_main(self):
-        bowlers = []
+    def launch_mainapp(self):
         for i in range(self.player_list.count()):
-            bowler = Bowler(self.player_list.item(i))
-            bowlers.append(bowler)
-            self.verticalLayout.addWidget(QtGui.QWidget(), 0, QtCore.QAlignment(0))
-        main.show()
+            player = BowlerScore()
+            player.ui.player_name.setText(self.player_list.item(i).text())
+            player.ui.cum_score.setText('0')
+            mainapp.ui.verticalLayout.addWidget(player)
+        mainapp.add_bowlers(self.bowlers)
+        mainapp.show()
+        intro.hide()
 
     def retranslateUi(self, StartGame):
         StartGame.setWindowTitle(QtGui.QApplication.translate("StartGame", "Crimson Application", None, QtGui.QApplication.UnicodeUTF8))
         self.welcome.setText(QtGui.QApplication.translate("StartGame", "Welcome to Matt\'s resume!", None, QtGui.QApplication.UnicodeUTF8))
-        self.start_game.setText(QtGui.QApplication.translate("StartGame", "Let\'s Bowl!", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_start_game.setText(QtGui.QApplication.translate("StartGame", "Let\'s Bowl!", None, QtGui.QApplication.UnicodeUTF8))
         self.label_add_player.setText(QtGui.QApplication.translate("StartGame", "Enter Player Names Below:", None, QtGui.QApplication.UnicodeUTF8))
-        self.add_new_bowler.setText(QtGui.QApplication.translate("StartGame", "Add New Bowler", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_add_new_bowler.setText(QtGui.QApplication.translate("StartGame", "Add New Bowler", None, QtGui.QApplication.UnicodeUTF8))
 
 
 class ControlStartWidget(QtGui.QMainWindow):
@@ -104,14 +113,50 @@ class ControlStartWidget(QtGui.QMainWindow):
 
 
 class ControlMainWindow(QtGui.QMainWindow):
+
+    bowlers = []
+
     def __init__(self, parent=None):
         super(ControlMainWindow, self).__init__(parent)
         self.ui = mainwindow.Ui_MainWindow()
+        self.ui.setupUi(self)
+
+    def add_bowlers(self, bowlers):
+        self.bowlers = bowlers
+
+    def bowl(self):
+        for bowler in self.bowlers:
+            if self.current_bowler.text() == bowler.get_name():
+                curr_bowler = bowler
+                break
+        strike_spare_or_open = curr_bowler.bowl()
+        if strike_spare_or_open:
+            self.ui.current_bowler.setText(self.get_next_bowler())
+
+    def get_next_bowler(self):
+        for bowler, next_bowler in self.neighborhood(self.bowlers):
+            if bowler.get_name() == self.current_bowler.text():
+                return next_bowler.get_name()
+
+    @staticmethod
+    def neighborhood(iterable):
+        iterator = iter(iterable)
+        item = iterator.next()  # throws StopIteration if empty.
+        for next in iterator:
+            yield (item, next)
+            item = next
+        yield (item, None)
+
+
+class BowlerScore(QtGui.QMainWindow):
+    def __init__(self, parent=None):
+        super(BowlerScore, self).__init__(parent)
+        self.ui = bowler_score.Ui_bowler_score()
         self.ui.setupUi(self)
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     intro = ControlStartWidget()
     intro.show()
-    main = ControlMainWindow()
+    mainapp = ControlMainWindow()
     sys.exit(app.exec_())

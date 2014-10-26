@@ -46,7 +46,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
-     <widget class="QPushButton" name="start_game">
+     <widget class="QPushButton" name="button_start_game">
       <property name="text">
        <string>Let's Bowl!</string>
       </property>
@@ -109,7 +109,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="add_new_bowler">
+       <widget class="QPushButton" name="button_add_new_bowler">
         <property name="minimumSize">
          <size>
           <width>20</width>
