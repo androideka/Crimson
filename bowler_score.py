@@ -1,13 +1,7 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'bowler_score.ui'
-#
-# Created: Mon Oct 27 16:39:32 2014
-#      by: pyside-uic 0.2.15 running on PySide 1.2.1
-#
-# WARNING! All changes made in this file will be lost!
+__author__ = 'androideka'
 
 from PySide import QtCore, QtGui
+
 
 class Ui_bowler_score(object):
     def setupUi(self, bowler_score):

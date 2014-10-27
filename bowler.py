@@ -1,4 +1,4 @@
-__author__ = 'mrose'
+__author__ = 'androideka'
 
 
 class Bowler(object):
@@ -11,15 +11,19 @@ class Bowler(object):
 
     def bowl(self, pins_left):
         #End-of-game stuff
-        if self.current_frame >= 11:
-            if self.frames[10] == [10]:
-                if self.current_frame > 12:
-                    return False
-            elif sum(self.frames[10]) == 10:
-                if len(self.frames[11]) == 1:
-                    return False
-            else:
+        if self.current_frame >= 10:
+            print 'Current frame: ' + str(self.current_frame)
+            if self.current_frame == 12 and self.frames[12] == [10]:
+                self.score.append(10)
+                return True
+            if self.current_frame == 11 and self.frames[11] == [10]:
+                self.score.append(10)
                 return False
+            if self.frames[10] == [10]:
+                self.score.append(10)
+                return False
+            #FIGURE THIS SHIT OUT
+            return True
         # Bowl logic
         if not len(self.get_current_frame()):
             pin_count = 10

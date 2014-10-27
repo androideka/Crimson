@@ -161,6 +161,8 @@ class ControlMainWindow(QtGui.QMainWindow):
     def update_score(self, bowler_index):
         # So ugly... Please forgive me
         bowler = self.bowlers[bowler_index]
+        print bowler.score
+        print bowler.frames
         player_widget = mainapp.ui.verticalLayout.itemAt(bowler_index).widget()
         frame = len(bowler.frames)
         if not bowler.frames[frame]:
@@ -230,7 +232,6 @@ class ControlMainWindow(QtGui.QMainWindow):
 
     @staticmethod
     def update_frame_scores(player_widget, bowler):
-        print bowler.score
         if len(bowler.score) >= 1:
             player_widget.ui.score_1.setText(str(bowler.score[0]))
         if len(bowler.score) >= 2:
