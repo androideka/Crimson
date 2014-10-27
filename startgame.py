@@ -108,7 +108,6 @@ class Ui_StartGame(object):
 
     def bowl(self):
         bowler_name = mainapp.ui.current_bowler.text()
-        print bowler_name
         mainapp.bowl(self.bowler_dict, bowler_name)
 
     def retranslateUi(self, StartGame):

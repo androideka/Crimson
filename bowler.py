@@ -11,8 +11,14 @@ class Bowler(object):
         self.current_frame = 1
 
     def bowl(self, pins_left):
-        if 
-
+        #End-of-game stuff
+        if self.current_frame >= 11:
+            if len(self.frames[10]) == 2 and len(self.frames[11]) > 1:
+                return False
+            elif len(self.frames[10]) == 1 and len(self.frames[11]) == 2:
+                return False
+            elif self.current_frame > 12:
+                return False
         if not len(self.get_current_frame()):
             pin_count = 10
             self.frames[self.current_frame] = [pin_count - pins_left]
