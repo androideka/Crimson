@@ -12,11 +12,13 @@ class Bowler(object):
     def bowl(self, pins_left):
         #End-of-game stuff
         if self.current_frame >= 11:
-            if len(self.frames[10]) == 2 and len(self.frames[11]) >= 1:
-                return True
-            elif len(self.frames[10]) == 1 and len(self.frames[11]) == 2:
-                return True
-            elif self.current_frame > 12:
+            if self.frames[10] == [10]:
+                if self.current_frame > 12:
+                    return False
+            elif sum(self.frames[10]) == 10:
+                if len(self.frames[11]) == 1:
+                    return False
+            else:
                 return False
         # Bowl logic
         if not len(self.get_current_frame()):
@@ -43,11 +45,10 @@ class Bowler(object):
     def check_strike_or_spare(self):
         for frame, frame_score in self.frames.iteritems():
             # Check whether frame is not open
-            if sum(frame_score) == 10 and len(self.score) > frame + 1 and self.score[frame - 1] <= 10:
+            if sum(frame_score) == 10 and len(self.score) > frame and self.score[frame - 1] <= 10:
                 if len(frame_score) == 1 and len(self.score) > 2:
                     # Strike
-                    print 'Strike!'
-                    if frame == len(self.frames) - 1 or frame > 9:
+                    if frame == len(self.frames) - 1 or self.current_frame >= 12:
                         break
                     if len(self.frames[frame + 1]) == 2:
                         self.score[frame - 1] += sum(self.frames[frame + 1])
@@ -55,7 +56,6 @@ class Bowler(object):
                         self.score[frame - 1] += self.frames[frame + 1][0] + self.frames[frame + 2][0]
                 elif len(frame_score) != 1:
                     # Spare
-                    print 'Spare!'
                     self.score[frame - 1] += self.frames[frame + 1][0]
 
     def get_current_frame(self):

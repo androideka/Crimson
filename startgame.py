@@ -141,15 +141,17 @@ class ControlMainWindow(QtGui.QMainWindow):
         current_bowler_index = index
         current_bowler = self.bowlers[current_bowler_index]
         if current_bowler.get_name() == 'Matt':
-            pins_left = 0
+            if len(current_bowler.get_current_frame()) == 0:
+                pins_left = random.randint(0, 2)
+            else:
+                pins_left = random.randint(0, 10 - current_bowler.get_current_frame()[0])
+            #pins_left = 0
         else:
             if len(current_bowler.get_current_frame()) == 0:
                 pins_left = random.randint(0, 10)
             else:
                 pins_left = random.randint(0, 10 - current_bowler.get_current_frame()[0])
         strike_spare_or_open = self.next_bowler.bowl(pins_left)
-        print current_bowler.get_name() + ' score: ' + str(current_bowler.get_total_score())
-        print current_bowler.get_name() + ' frames: ' + str(current_bowler.get_frame_scores())
         self.update_score(current_bowler_index)
         if strike_spare_or_open and len(self.bowlers) > 1:
             self.next_bowler = self.get_next_bowler(current_bowler_index)
@@ -216,7 +218,9 @@ class ControlMainWindow(QtGui.QMainWindow):
                 if len(bowler.frames[frame - 1]) > 1:
                     player_widget.ui.throw_21.setText(throw1)
                 else:
-                    player_widget.ui.throw_20.setText('X')
+                    player_widget.ui.throw_20.setText(throw1)
+                    if len(bowler.frames[frame]) == 2 and bowler.frames[10] == [10]:
+                        player_widget.ui.throw_21.setText(throw2)
             if frame == 12:
                 player_widget.ui.throw_21.setText(throw1)
         ControlMainWindow.update_frame_scores(player_widget, bowler)
@@ -225,6 +229,7 @@ class ControlMainWindow(QtGui.QMainWindow):
 
     @staticmethod
     def update_frame_scores(player_widget, bowler):
+        print bowler.score
         if len(bowler.score) >= 1:
             player_widget.ui.score_1.setText(str(bowler.score[0]))
         if len(bowler.score) >= 2:
@@ -244,7 +249,12 @@ class ControlMainWindow(QtGui.QMainWindow):
         if len(bowler.score) >= 9:
             player_widget.ui.score_9.setText(str(bowler.score[8]))
         if len(bowler.score) >= 10:
-            player_widget.ui.score_10.setText(str(bowler.score[9]))
+            final_frame_score = bowler.score[9]
+            if len(bowler.score) > 10:
+                final_frame_score += bowler.score[10]
+            if len(bowler.score) == 12:
+                final_frame_score += bowler.score[11]
+            player_widget.ui.score_10.setText(str(final_frame_score))
 
     def get_next_bowler(self, bowler_index):
         if bowler_index == len(self.bowlers) - 1:
