@@ -34,10 +34,10 @@ class Bowler(object):
 
     def advance_frame(self):
         self.score.append(sum(self.get_current_frame()))
-        self.current_frame += 1
-        self.frames[self.current_frame] = []
         if self.score:
             self.check_strike_or_spare()
+        self.current_frame += 1
+        self.frames[self.current_frame] = []
 
     def check_strike_or_spare(self):
         for frame, frame_score in self.frames.iteritems():

@@ -133,7 +133,6 @@ class ControlMainWindow(QtGui.QMainWindow):
             self.next_bowler = bowlers[0]
         if not self.bowlers:
             self.bowlers = bowlers
-        print self.bowlers
         index = 0
         for key in self.bowlers.keys():
             bowler = self.bowlers[key]
@@ -149,26 +148,82 @@ class ControlMainWindow(QtGui.QMainWindow):
             else:
                 pins_left = random.randint(0, 10 - current_bowler.get_current_frame()[0])
         strike_spare_or_open = self.next_bowler.bowl(pins_left)
-        print 'Current frame: ' + str(current_bowler.current_frame)
-        print current_bowler.get_total_score()
-        print current_bowler.get_frame_scores()
+        print current_bowler.get_name() + ' score: ' + str(current_bowler.get_total_score())
+        print current_bowler.get_name() + ' frames: ' + str(current_bowler.get_frame_scores())
         self.update_score(current_bowler_index)
         if strike_spare_or_open and len(self.bowlers) > 1:
             self.next_bowler = self.get_next_bowler(current_bowler_index)
             self.ui.current_bowler.setText(self.next_bowler.get_name())
 
     def update_score(self, bowler_index):
-        print intro.ui.bowler_dict
         # So ugly... Please forgive me
         bowler = self.bowlers[bowler_index]
-        index = 0
-        for i in range(len(intro.ui.bowler_dict)):
-            if intro.ui.bowler_dict[i] == bowler.get_name():
-                index = i
-        print 'Index: ' + str(index)
-        print 'Widget: ' + str(mainapp.ui.verticalLayout.itemAt(index))
-        bowler_score_widget = mainapp.ui.verticalLayout.itemAt(index)
+        player = mainapp.ui.verticalLayout.itemAt(bowler_index).widget()
         frame = len(bowler.frames)
+        if not bowler.frames[frame]:
+            frame -= 1
+        if bowler.frames[frame]:
+            score = sum(bowler.get_score()[0:frame])
+            print 'Updating a score.'
+            if frame == 1:
+                player.ui.throw_1.setText(str(bowler.frames[1][0]))
+                if len(bowler.frames[frame]) > 1:
+                    player.ui.throw_2.setText(str(bowler.frames[1][1]))
+                player.ui.score_1.setText(str(score))
+            if frame == 2:
+                player.ui.throw_3.setText(str(bowler.frames[2][0]))
+                print len(bowler.frames[frame])
+                if len(bowler.frames[frame]) > 1:
+                    player.ui.throw_4.setText(str(bowler.frames[2][1]))
+                player.ui.score_2.setText(str(score))
+            if frame == 3:
+                player.ui.throw_5.setText(str(bowler.frames[3][0]))
+                if len(bowler.frames[frame]) > 1:
+                    player.ui.throw_6.setText(str(bowler.frames[3][1]))
+                player.ui.score_3.setText(str(score))
+            if frame == 4:
+                player.ui.throw_7.setText(str(bowler.frames[4][0]))
+                if len(bowler.frames[frame]) > 1:
+                    player.ui.throw_8.setText(str(bowler.frames[4][1]))
+                player.ui.score_4.setText(str(score))
+            if frame == 5:
+                player.ui.throw_9.setText(str(bowler.frames[5][0]))
+                if len(bowler.frames[frame]) > 1:
+                    player.ui.throw_10.setText(str(bowler.frames[5][1]))
+                player.ui.score_5.setText(str(score))
+            if frame == 6:
+                player.ui.throw_11.setText(str(bowler.frames[6][0]))
+                if len(bowler.frames[frame]) > 1:
+                    player.ui.throw_12.setText(str(bowler.frames[6][1]))
+                player.ui.score_6.setText(str(score))
+            if frame == 7:
+                player.ui.throw_13.setText(str(bowler.frames[7][0]))
+                if len(bowler.frames[frame]) > 1:
+                    player.ui.throw_14.setText(str(bowler.frames[7][1]))
+                player.ui.score_7.setText(str(score))
+            if frame == 8:
+                player.ui.throw_15.setText(str(bowler.frames[8][0]))
+                if len(bowler.frames[frame]) > 1:
+                    player.ui.throw_16.setText(str(bowler.frames[8][1]))
+                player.ui.score_8.setText(str(score))
+            if frame == 9:
+                player.ui.throw_17.setText(str(bowler.frames[9][0]))
+                if len(bowler.frames[frame]) > 1:
+                    player.ui.throw_18.setText(str(bowler.frames[9][1]))
+                player.ui.score_9.setText(str(score))
+            if frame == 10:
+                player.ui.throw_19.setText(str(bowler.frames[10][0]))
+                if len(bowler.frames[frame]) > 1:
+                    player.ui.throw_20.setText(str(bowler.frames[10][1]))
+                player.ui.score_10.setText(str(score))
+            if frame == 11:
+                if len(bowler.frames[frame - 1]) > 1:
+                    player.ui.throw_21.setText(str(bowler.frames[11][0]))
+                else:
+                    player.ui.throw_20.setText('X')
+            if frame == 12:
+                player.ui.throw_21.setText(str(bowler.frames[12][0]))
+        player.ui.cum_score.setText(str(bowler.get_total_score()))
         return False
 
     def get_next_bowler(self, bowler_index):
