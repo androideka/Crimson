@@ -12,9 +12,13 @@ from PySide import QtCore, QtGui
 from bowler import Bowler
 import mainwindow
 import bowler_score
+import random
 
 
 class Ui_StartGame(object):
+
+    bowler_dict = {}
+    player_num = 0
 
     def setupUi(self, StartGame):
         StartGame.setObjectName("StartGame")
@@ -72,19 +76,25 @@ class Ui_StartGame(object):
 
         QtGui.QWidget.connect(self.button_add_new_bowler, QtCore.SIGNAL("pressed()"),
                               self.add_bowler)
-        self.player_list.addItem("Matt")
+
         QtGui.QWidget.connect(self.button_start_game, QtCore.SIGNAL("pressed()"),
                               self.launch_mainapp)
 
         QtGui.QWidget.connect(mainapp.ui.button_bowl, QtCore.SIGNAL("pressed()"),
-                              ControlMainWindow.bowl())
+                              self.bowl)
+
+        self.player_list.addItem("Matt")
+        matt = Bowler('Matt')
+        self.bowler_dict[0] = matt
+        self.player_num += 1
 
     def add_bowler(self):
         name = self.player_name.text()
         if name:
             self.player_list.addItem(name)
-        bowler = Bowler(self.player_name.text())
-        self.bowlers.append(bowler)
+            bowler = Bowler(name)
+            self.bowler_dict[self.player_num] = bowler
+        self.player_num += 1
         self.player_name.clear()
 
     def launch_mainapp(self):
@@ -93,9 +103,13 @@ class Ui_StartGame(object):
             player.ui.player_name.setText(self.player_list.item(i).text())
             player.ui.cum_score.setText('0')
             mainapp.ui.verticalLayout.addWidget(player)
-        mainapp.add_bowlers(self.bowlers)
         mainapp.show()
         intro.hide()
+
+    def bowl(self):
+        bowler_name = mainapp.ui.current_bowler.text()
+        print bowler_name
+        mainapp.bowl(self.bowler_dict, bowler_name)
 
     def retranslateUi(self, StartGame):
         StartGame.setWindowTitle(QtGui.QApplication.translate("StartGame", "Crimson Application", None, QtGui.QApplication.UnicodeUTF8))
@@ -114,38 +128,62 @@ class ControlStartWidget(QtGui.QMainWindow):
 
 class ControlMainWindow(QtGui.QMainWindow):
 
-    bowlers = []
+    bowlers = {}
+    next_bowler = Bowler('')
 
     def __init__(self, parent=None):
         super(ControlMainWindow, self).__init__(parent)
         self.ui = mainwindow.Ui_MainWindow()
         self.ui.setupUi(self)
 
-    def add_bowlers(self, bowlers):
-        self.bowlers = bowlers
+    def bowl(self, bowlers, name):
+        if not self.next_bowler.get_name():
+            self.next_bowler = bowlers[0]
+        if not self.bowlers:
+            self.bowlers = bowlers
+        print self.bowlers
+        index = 0
+        for key in self.bowlers.keys():
+            bowler = self.bowlers[key]
+            if bowler.get_name() == name:
+                index = key
+        current_bowler_index = index
+        current_bowler = self.bowlers[current_bowler_index]
+        if current_bowler.get_name() == 'Matt':
+            pins_left = 0
+        else:
+            if len(current_bowler.get_current_frame()) == 0:
+                pins_left = random.randint(0, 10)
+            else:
+                pins_left = random.randint(0, 10 - current_bowler.get_current_frame()[0])
+        strike_spare_or_open = self.next_bowler.bowl(pins_left)
+        print current_bowler.get_total_score()
+        print current_bowler.get_frame_scores()
+        self.update_score(current_bowler_index)
+        if strike_spare_or_open and len(self.bowlers) > 1:
+            self.next_bowler = self.get_next_bowler(current_bowler_index)
+            self.ui.current_bowler.setText(self.next_bowler.get_name())
 
-    def bowl(self):
-        for bowler in self.bowlers:
-            if self.current_bowler.text() == bowler.get_name():
-                curr_bowler = bowler
-                break
-        strike_spare_or_open = curr_bowler.bowl()
-        if strike_spare_or_open:
-            self.ui.current_bowler.setText(self.get_next_bowler())
+    def update_score(self, bowler_index):
+        print intro.ui.bowler_dict
+        # So ugly... Please forgive me
+        bowler = self.bowlers[bowler_index]
+        index = 0
+        for i in range(len(intro.ui.bowler_dict)):
+            if intro.ui.bowler_dict[i] == bowler.get_name():
+                index = i
+        print 'Index: ' + str(index)
+        print 'Widget: ' + str(mainapp.ui.verticalLayout.itemAt(index))
+        bowler_score_widget = mainapp.ui.verticalLayout.itemAt(index)
+        frame = len(bowler.frames)
+        return False
 
-    def get_next_bowler(self):
-        for bowler, next_bowler in self.neighborhood(self.bowlers):
-            if bowler.get_name() == self.current_bowler.text():
-                return next_bowler.get_name()
-
-    @staticmethod
-    def neighborhood(iterable):
-        iterator = iter(iterable)
-        item = iterator.next()  # throws StopIteration if empty.
-        for next in iterator:
-            yield (item, next)
-            item = next
-        yield (item, None)
+    def get_next_bowler(self, bowler_index):
+        if bowler_index == len(self.bowlers) - 1:
+            bowler_index = 0
+        else:
+            bowler_index += 1
+        return self.bowlers[bowler_index]
 
 
 class BowlerScore(QtGui.QMainWindow):
@@ -156,7 +194,7 @@ class BowlerScore(QtGui.QMainWindow):
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
+    mainapp = ControlMainWindow()
     intro = ControlStartWidget()
     intro.show()
-    mainapp = ControlMainWindow()
     sys.exit(app.exec_())
