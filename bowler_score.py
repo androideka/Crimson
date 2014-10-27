@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'bowler_score.ui'
 #
-# Created: Mon Oct 27 11:03:03 2014
+# Created: Mon Oct 27 16:39:32 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,20 +12,20 @@ from PySide import QtCore, QtGui
 class Ui_bowler_score(object):
     def setupUi(self, bowler_score):
         bowler_score.setObjectName("bowler_score")
-        bowler_score.resize(920, 101)
+        bowler_score.resize(940, 105)
         self.verticalLayoutWidget = QtGui.QWidget(bowler_score)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 921, 101))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 940, 104))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
+        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
         self.line_59 = QtGui.QFrame(self.verticalLayoutWidget)
         self.line_59.setFrameShape(QtGui.QFrame.HLine)
         self.line_59.setFrameShadow(QtGui.QFrame.Sunken)
         self.line_59.setObjectName("line_59")
         self.verticalLayout.addWidget(self.line_59)
-        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.player_name = QtGui.QLabel(self.verticalLayoutWidget)
@@ -584,6 +584,8 @@ class Ui_bowler_score(object):
         self.line_60.setFrameShadow(QtGui.QFrame.Sunken)
         self.line_60.setObjectName("line_60")
         self.verticalLayout.addWidget(self.line_60)
+        spacerItem2 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem2)
 
         self.retranslateUi(bowler_score)
         QtCore.QMetaObject.connectSlotsByName(bowler_score)

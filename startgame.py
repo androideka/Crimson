@@ -96,6 +96,8 @@ class Ui_StartGame(object):
             player.ui.player_name.setText(self.player_list.item(i).text())
             player.ui.cum_score.setText('0')
             mainapp.ui.verticalLayout.addWidget(player)
+        spacer = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        mainapp.ui.verticalLayout.addSpacerItem(spacer)
         mainapp.show()
         intro.hide()
 
@@ -145,7 +147,6 @@ class ControlMainWindow(QtGui.QMainWindow):
                 pins_left = random.randint(0, 2)
             else:
                 pins_left = random.randint(0, 10 - current_bowler.get_current_frame()[0])
-            #pins_left = 0
         else:
             if len(current_bowler.get_current_frame()) == 0:
                 pins_left = random.randint(0, 10)

@@ -14,11 +14,11 @@ class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(940, 373)
+        MainWindow.resize(960, 513)
         self.centralWidget = QtGui.QWidget(MainWindow)
         self.centralWidget.setObjectName("centralWidget")
         self.horizontalLayoutWidget = QtGui.QWidget(self.centralWidget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(9, 0, 931, 31))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(9, 0, 941, 31))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtGui.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -35,7 +35,7 @@ class Ui_MainWindow(object):
         self.button_bowl.setObjectName("button_bowl")
         self.horizontalLayout.addWidget(self.button_bowl)
         self.verticalLayoutWidget = QtGui.QWidget(self.centralWidget)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(9, 39, 931, 331))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(9, 39, 941, 471))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
