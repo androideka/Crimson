@@ -3,7 +3,6 @@ __author__ = 'mrose'
 
 class Bowler(object):
 
-
     def __init__(self, name):
         self.name = name
         self.score = []
@@ -26,8 +25,7 @@ class Bowler(object):
             pin_count = 10 - self.get_current_frame()[0]
             self.frames[self.current_frame].append(pin_count - pins_left)
         frame = self.frames[self.current_frame]
-        print self.name + ' Frames: ' + str(self.frames)
-        print self.name + ' Score: ' + str(self.score)
+
         if len(frame) == 2 or sum(frame) == 10:
             self.advance_frame()
             return True

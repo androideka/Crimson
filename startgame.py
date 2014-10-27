@@ -1,11 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'startgame.ui'
-#
-# Created: Fri Oct 24 15:08:53 2014
-#      by: pyside-uic 0.2.15 running on PySide 1.2.1
-#
-# WARNING! All changes made in this file will be lost!
+__author__ = 'androideka'
 
 import sys
 from PySide import QtCore, QtGui
@@ -156,6 +149,7 @@ class ControlMainWindow(QtGui.QMainWindow):
             else:
                 pins_left = random.randint(0, 10 - current_bowler.get_current_frame()[0])
         strike_spare_or_open = self.next_bowler.bowl(pins_left)
+        print 'Current frame: ' + str(current_bowler.current_frame)
         print current_bowler.get_total_score()
         print current_bowler.get_frame_scores()
         self.update_score(current_bowler_index)
