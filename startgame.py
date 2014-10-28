@@ -13,6 +13,8 @@ class Ui_StartGame(object):
     bowler_dict = {}
     player_num = 0
 
+    """ Used pyside-uic to bind Qt Designer cpp code to python, sets up UI
+    """
     def setupUi(self, StartGame):
         StartGame.setObjectName("StartGame")
         StartGame.resize(400, 300)
@@ -81,6 +83,8 @@ class Ui_StartGame(object):
         self.bowler_dict[0] = matt
         self.player_num += 1
 
+    """ Adds a bowler to the game
+    """
     def add_bowler(self):
         name = self.player_name.text()
         if name:
@@ -90,6 +94,8 @@ class Ui_StartGame(object):
         self.player_num += 1
         self.player_name.clear()
 
+    """ Hides introduction and launches main game
+    """
     def launch_mainapp(self):
         for i in range(self.player_list.count()):
             player = BowlerScore()
@@ -101,6 +107,8 @@ class Ui_StartGame(object):
         mainapp.show()
         intro.hide()
 
+    """ Gets current bowler name and passes to ControlMainWindow bowl function
+    """
     def bowl(self):
         bowler_name = mainapp.ui.current_bowler.text()
         mainapp.bowl(self.bowler_dict, bowler_name)
@@ -130,93 +138,94 @@ class ControlMainWindow(QtGui.QMainWindow):
         self.ui = mainwindow.Ui_MainWindow()
         self.ui.setupUi(self)
 
+    """ Gets current bowler from name, rolls, and updates score
+    Decides whether to move to next player (e.g. a strike, a spare, or an open frame)
+    """
     def bowl(self, bowlers, name):
         if not self.next_bowler.get_name():
             self.next_bowler = bowlers[0]
         if not self.bowlers:
             self.bowlers = bowlers
-        index = 0
+        current_bowler_index = 0
         for key in self.bowlers.keys():
             bowler = self.bowlers[key]
             if bowler.get_name() == name:
-                index = key
-        current_bowler_index = index
+                current_bowler_index = key
+                break
         current_bowler = self.bowlers[current_bowler_index]
         if current_bowler.get_name() == 'Matt':
-            if len(current_bowler.get_current_frame()) == 0:
-                pins_left = random.randint(0, 2)
-            else:
-                pins_left = random.randint(0, 10 - current_bowler.get_current_frame()[0])
-            pins_left = 0
+            skill_level = 2
         else:
-            if len(current_bowler.get_current_frame()) == 0:
-                pins_left = random.randint(0, 10)
-            else:
-                pins_left = random.randint(0, 10 - current_bowler.get_current_frame()[0])
+            skill_level = 10
+        if len(current_bowler.get_current_frame()) == 0:
+            pins_left = random.randint(0, skill_level)
+        else:
+            pins_left = random.randint(0, 10 - current_bowler.get_current_frame()[0])
         strike_spare_or_open = self.next_bowler.bowl(pins_left)
         self.update_score(current_bowler_index)
-        if strike_spare_or_open and len(self.bowlers) > 1:
+        if strike_spare_or_open:
             self.next_bowler = self.get_next_bowler(current_bowler_index)
             self.ui.current_bowler.setText(self.next_bowler.get_name())
 
+    """ Updates UI elements (individual rolls) with new rolls, accounting for strikes and spares
+    """
     def update_score(self, bowler_index):
         # So ugly... Please forgive me
         bowler = self.bowlers[bowler_index]
-        print bowler.get_name() + str(bowler.score)
-        print bowler.get_name() + str(bowler.frames)
         player_widget = mainapp.ui.verticalLayout.itemAt(bowler_index).widget()
         frame = len(bowler.frames)
         if not bowler.frames[frame]:
             frame -= 1
         if bowler.frames[frame]:
+            frame_finished = len(bowler.frames[frame]) > 1
             throw1 = str(bowler.frames[frame][0])
             if throw1 == '10':
                 throw1 = 'X'
                 # Strike animation?
-            elif len(bowler.frames[frame]) > 1:
+            elif frame_finished:
                 throw2 = str(bowler.frames[frame][1])
                 if sum(bowler.frames[frame]) == 10:
                     throw2 = '/'
                     # Spare animation?
             if frame == 1:
                 player_widget.ui.throw_1.setText(throw1)
-                if len(bowler.frames[frame]) > 1:
+                if frame_finished:
                     player_widget.ui.throw_2.setText(throw2)
             if frame == 2:
                 player_widget.ui.throw_3.setText(throw1)
-                if len(bowler.frames[frame]) > 1:
+                if frame_finished:
                     player_widget.ui.throw_4.setText(throw2)
             if frame == 3:
                 player_widget.ui.throw_5.setText(throw1)
-                if len(bowler.frames[frame]) > 1:
+                if frame_finished:
                     player_widget.ui.throw_6.setText(throw2)
             if frame == 4:
                 player_widget.ui.throw_7.setText(throw1)
-                if len(bowler.frames[frame]) > 1:
+                if frame_finished:
                     player_widget.ui.throw_8.setText(throw2)
             if frame == 5:
                 player_widget.ui.throw_9.setText(throw1)
-                if len(bowler.frames[frame]) > 1:
+                if frame_finished:
                     player_widget.ui.throw_10.setText(throw2)
             if frame == 6:
                 player_widget.ui.throw_11.setText(throw1)
-                if len(bowler.frames[frame]) > 1:
+                if frame_finished:
                     player_widget.ui.throw_12.setText(throw2)
             if frame == 7:
                 player_widget.ui.throw_13.setText(throw1)
-                if len(bowler.frames[frame]) > 1:
+                if frame_finished:
                     player_widget.ui.throw_14.setText(throw2)
             if frame == 8:
                 player_widget.ui.throw_15.setText(throw1)
-                if len(bowler.frames[frame]) > 1:
+                if frame_finished:
                     player_widget.ui.throw_16.setText(throw2)
             if frame == 9:
                 player_widget.ui.throw_17.setText(throw1)
-                if len(bowler.frames[frame]) > 1:
+                if frame_finished:
                     player_widget.ui.throw_18.setText(throw2)
             if frame == 10:
                 player_widget.ui.throw_19.setText(throw1)
-                if len(bowler.frames[frame]) > 1:
+                if frame_finished:
                     player_widget.ui.throw_20.setText(throw2)
             if frame == 11:
                 if len(bowler.frames[frame - 1]) > 1:
@@ -229,8 +238,9 @@ class ControlMainWindow(QtGui.QMainWindow):
                 player_widget.ui.throw_21.setText(throw1)
         ControlMainWindow.update_frame_scores(player_widget, bowler)
         player_widget.ui.cum_score.setText(str(bowler.get_total_score()))
-        return False
 
+    """ Updates frame scores
+    """
     @staticmethod
     def update_frame_scores(player_widget, bowler):
         if len(bowler.score) >= 1:

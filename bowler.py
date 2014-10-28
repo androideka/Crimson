@@ -9,72 +9,56 @@ class Bowler(object):
         self.frames = {}
         self.current_frame = 1
 
+    """ Rolls a bowling ball. Special (lengthy) logic for final frame
+    """
     def bowl(self, pins_left):
-        if self.current_frame > 12:
-            return True
+        # Tenth-frame logic
         if self.current_frame == 12:
-            print 'twelfth frame'
             if len(self.frames[10]) == 1 and len(self.frames[11]) == 1:
                 self.calculate_score(pins_left)
                 self.advance_frame()
-            print 'this'
             return True
-        if self.current_frame == 11:
-            print 'eleventh frame'
+        elif self.current_frame == 11:
             if len(self.frames[11]) > 2:
                 return True
-            if len(self.frames[10]) == 1:
-                print 'tenth strike'
+            elif len(self.frames[10]) == 1:
                 self.calculate_score(pins_left)
                 if self.frames[11] == [10]:
                     self.advance_frame()
-                    print 'that'
                     return False
                 elif len(self.frames[11]) == 1:
-                    print 'what'
                     return False
                 else:
                     return True
             elif sum(self.frames[10]) == 10:
-                print 'is this the one you want?'
                 if len(self.frames[11]) < 1:
                     self.calculate_score(pins_left)
                 self.advance_frame()
                 return True
             else:
                 self.advance_frame()
-                print 'this!'
                 return True
-
-        #End-of-game stuff
-        print self.current_frame
-
-        if self.current_frame == 10:
+        elif self.current_frame == 10:
             self.calculate_score(pins_left)
-            print 'tenth frame'
-            print 'Fucking frames: ' + str(self.frames)
-            if self.frames[10] == [10]:
+            if self.frames[10] == [10] or sum(self.frames[10]) == 10:
                 self.advance_frame()
-                print 'huh?'
-                return False
-            elif sum(self.frames[10]) == 10:
-                self.advance_frame()
-                print 'FUCK OFF'
                 return False
             elif len(self.frames[10]) == 2:
-                print 'here'
                 self.advance_frame()
                 return True
             else:
                 return False
+
+        # Every other frame
         self.calculate_score(pins_left)
         if len(self.frames[self.current_frame]) == 2 or sum(self.frames[self.current_frame]) == 10:
             self.advance_frame()
-            print 'GODDAMMIT'
             return True
         else:
             return False
 
+    """ Get score for current roll, given pins left standing
+    """
     def calculate_score(self, pins_left):
         if not len(self.get_current_frame()):
             pin_count = 10
@@ -83,6 +67,8 @@ class Bowler(object):
             pin_count = 10 - self.get_current_frame()[0]
             self.frames[self.current_frame].append(pin_count - pins_left)
 
+    """ Adds an empty frame to the end of frames score
+    """
     def advance_frame(self):
         self.score.append(sum(self.get_current_frame()))
         if self.score and self.current_frame < 12:
@@ -90,6 +76,8 @@ class Bowler(object):
         self.current_frame += 1
         self.frames[self.current_frame] = []
 
+    """ Implements special scoring for strikes and spares and changes scores accordingly
+    """
     def check_strike_or_spare(self):
         for frame, frame_score in self.frames.iteritems():
             # Check whether frame is not open
@@ -114,8 +102,7 @@ class Bowler(object):
 
     def get_last_frame(self):
         if len(self.frames) > 1:
-            last_frame = self.frames[self.current_frame - 1]
-            return last_frame
+            return self.frames[self.current_frame - 1]
 
     def get_total_score(self):
         return sum(self.score)
