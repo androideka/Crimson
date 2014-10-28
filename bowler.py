@@ -10,38 +10,82 @@ class Bowler(object):
         self.current_frame = 1
 
     def bowl(self, pins_left):
-        #End-of-game stuff
-        if self.current_frame >= 10:
-            print 'Current frame: ' + str(self.current_frame)
-            if self.current_frame == 12 and self.frames[12] == [10]:
-                self.score.append(10)
-                return True
-            if self.current_frame == 11 and self.frames[11] == [10]:
-                self.score.append(10)
-                return False
-            if self.frames[10] == [10]:
-                self.score.append(10)
-                return False
-            #FIGURE THIS SHIT OUT
+        if self.current_frame > 12:
             return True
-        # Bowl logic
+        if self.current_frame == 12:
+            print 'twelfth frame'
+            if len(self.frames[10]) == 1 and len(self.frames[11]) == 1:
+                self.calculate_score(pins_left)
+                self.advance_frame()
+            print 'this'
+            return True
+        if self.current_frame == 11:
+            print 'eleventh frame'
+            if len(self.frames[11]) > 2:
+                return True
+            if len(self.frames[10]) == 1:
+                print 'tenth strike'
+                self.calculate_score(pins_left)
+                if self.frames[11] == [10]:
+                    self.advance_frame()
+                    print 'that'
+                    return False
+                elif len(self.frames[11]) == 1:
+                    print 'what'
+                    return False
+                else:
+                    return True
+            elif sum(self.frames[10]) == 10:
+                print 'is this the one you want?'
+                if len(self.frames[11]) < 1:
+                    self.calculate_score(pins_left)
+                self.advance_frame()
+                return True
+            else:
+                self.advance_frame()
+                print 'this!'
+                return True
+
+        #End-of-game stuff
+        print self.current_frame
+
+        if self.current_frame == 10:
+            self.calculate_score(pins_left)
+            print 'tenth frame'
+            print 'Fucking frames: ' + str(self.frames)
+            if self.frames[10] == [10]:
+                self.advance_frame()
+                print 'huh?'
+                return False
+            elif sum(self.frames[10]) == 10:
+                self.advance_frame()
+                print 'FUCK OFF'
+                return False
+            elif len(self.frames[10]) == 2:
+                print 'here'
+                self.advance_frame()
+                return True
+            else:
+                return False
+        self.calculate_score(pins_left)
+        if len(self.frames[self.current_frame]) == 2 or sum(self.frames[self.current_frame]) == 10:
+            self.advance_frame()
+            print 'GODDAMMIT'
+            return True
+        else:
+            return False
+
+    def calculate_score(self, pins_left):
         if not len(self.get_current_frame()):
             pin_count = 10
             self.frames[self.current_frame] = [pin_count - pins_left]
         else:
             pin_count = 10 - self.get_current_frame()[0]
             self.frames[self.current_frame].append(pin_count - pins_left)
-        frame = self.frames[self.current_frame]
-
-        if len(frame) == 2 or sum(frame) == 10:
-            self.advance_frame()
-            return True
-        else:
-            return False
 
     def advance_frame(self):
         self.score.append(sum(self.get_current_frame()))
-        if self.score:
+        if self.score and self.current_frame < 12:
             self.check_strike_or_spare()
         self.current_frame += 1
         self.frames[self.current_frame] = []

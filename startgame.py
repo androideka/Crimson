@@ -147,6 +147,7 @@ class ControlMainWindow(QtGui.QMainWindow):
                 pins_left = random.randint(0, 2)
             else:
                 pins_left = random.randint(0, 10 - current_bowler.get_current_frame()[0])
+            pins_left = 0
         else:
             if len(current_bowler.get_current_frame()) == 0:
                 pins_left = random.randint(0, 10)
@@ -161,8 +162,8 @@ class ControlMainWindow(QtGui.QMainWindow):
     def update_score(self, bowler_index):
         # So ugly... Please forgive me
         bowler = self.bowlers[bowler_index]
-        print bowler.score
-        print bowler.frames
+        print bowler.get_name() + str(bowler.score)
+        print bowler.get_name() + str(bowler.frames)
         player_widget = mainapp.ui.verticalLayout.itemAt(bowler_index).widget()
         frame = len(bowler.frames)
         if not bowler.frames[frame]:
