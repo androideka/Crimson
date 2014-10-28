@@ -78,7 +78,7 @@ class Ui_StartGame(object):
         QtGui.QWidget.connect(mainapp.ui.button_bowl, QtCore.SIGNAL("released()"),
                               self.bowl)
 
-        self.player_list.addItem("Matt")
+        self.player_list.addItem('Matt')
         matt = Bowler('Matt')
         self.bowler_dict[0] = matt
         self.player_num += 1
@@ -91,6 +91,7 @@ class Ui_StartGame(object):
             self.player_list.addItem(name)
             bowler = Bowler(name)
             self.bowler_dict[self.player_num] = bowler
+
         self.player_num += 1
         self.player_name.clear()
 
@@ -102,8 +103,10 @@ class Ui_StartGame(object):
             player.ui.player_name.setText(self.player_list.item(i).text())
             player.ui.cum_score.setText('0')
             mainapp.ui.verticalLayout.addWidget(player)
+
         spacer = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         mainapp.ui.verticalLayout.addSpacerItem(spacer)
+
         mainapp.show()
         intro.hide()
 
@@ -142,10 +145,12 @@ class ControlMainWindow(QtGui.QMainWindow):
     Decides whether to move to next player (e.g. a strike, a spare, or an open frame)
     """
     def bowl(self, bowlers, name):
+        # Initialize
         if not self.next_bowler.get_name():
             self.next_bowler = bowlers[0]
         if not self.bowlers:
             self.bowlers = bowlers
+
         current_bowler_index = 0
         for key in self.bowlers.keys():
             bowler = self.bowlers[key]
@@ -153,14 +158,18 @@ class ControlMainWindow(QtGui.QMainWindow):
                 current_bowler_index = key
                 break
         current_bowler = self.bowlers[current_bowler_index]
+
         if current_bowler.get_name() == 'Matt':
             skill_level = 2
         else:
             skill_level = 10
+
+        # Simulates lane control hardware
         if len(current_bowler.get_current_frame()) == 0:
             pins_left = random.randint(0, skill_level)
         else:
             pins_left = random.randint(0, 10 - current_bowler.get_current_frame()[0])
+
         strike_spare_or_open = self.next_bowler.bowl(pins_left)
         self.update_score(current_bowler_index)
         if strike_spare_or_open:
@@ -173,20 +182,20 @@ class ControlMainWindow(QtGui.QMainWindow):
         # So ugly... Please forgive me
         bowler = self.bowlers[bowler_index]
         player_widget = mainapp.ui.verticalLayout.itemAt(bowler_index).widget()
+
         frame = len(bowler.frames)
         if not bowler.frames[frame]:
             frame -= 1
+
         if bowler.frames[frame]:
             frame_finished = len(bowler.frames[frame]) > 1
             throw1 = str(bowler.frames[frame][0])
             if throw1 == '10':
                 throw1 = 'X'
-                # Strike animation?
             elif frame_finished:
                 throw2 = str(bowler.frames[frame][1])
                 if sum(bowler.frames[frame]) == 10:
                     throw2 = '/'
-                    # Spare animation?
             if frame == 1:
                 player_widget.ui.throw_1.setText(throw1)
                 if frame_finished:
@@ -236,6 +245,7 @@ class ControlMainWindow(QtGui.QMainWindow):
                         player_widget.ui.throw_21.setText(throw2)
             if frame == 12:
                 player_widget.ui.throw_21.setText(throw1)
+
         ControlMainWindow.update_frame_scores(player_widget, bowler)
         player_widget.ui.cum_score.setText(str(bowler.get_total_score()))
 

@@ -9,7 +9,9 @@ class Bowler(object):
         self.frames = {}
         self.current_frame = 1
 
-    """ Rolls a bowling ball. Special (lengthy) logic for final frame
+    """ Rolls a bowling ball. Special (lengthy) logic for final frame.
+    pins_left would be the actual pins left as given by the hardware at the
+    end of the lane.
     """
     def bowl(self, pins_left):
         # Tenth-frame logic
