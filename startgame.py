@@ -1,11 +1,12 @@
 __author__ = 'androideka'
 
 import sys
+import random
 from PySide import QtCore, QtGui
 from bowler import Bowler
 import mainwindow
 import bowler_score
-import random
+import gameover
 
 
 class Ui_StartGame(object):
@@ -131,6 +132,13 @@ class ControlStartWidget(QtGui.QMainWindow):
         self.ui.setupUi(self)
 
 
+class ControlGameOverWidget(QtGui.QMainWindow):
+    def __init__(self, parent=None):
+        super(ControlGameOverWidget, self).__init__(parent)
+        self.ui = gameover.Ui_gameover()
+        self.ui.setupUi(self)
+
+
 class ControlMainWindow(QtGui.QMainWindow):
 
     bowlers = {}
@@ -172,6 +180,18 @@ class ControlMainWindow(QtGui.QMainWindow):
 
         strike_spare_or_open = self.next_bowler.bowl(pins_left)
         self.update_score(current_bowler_index)
+        if current_bowler_index == len(bowlers) - 1 and current_bowler.current_frame == 12:
+            print 'hey. game\'s over.'
+            winning_score = 0
+            winning_bowler = ''
+            for bowler_index, bowler in self.bowlers.iteritems():
+                if bowler.get_total_score() > winning_score:
+                    winning_score = bowler.get_total_score()
+                    winning_bowler = bowler.get_name()
+                    print winning_bowler + str(winning_score)
+            winner.ui.label_2.setText('Congratulations, ' + str(winning_bowler) + '!!! You\ve won the game!')
+            winner.show()
+            mainapp.hide()
         if strike_spare_or_open:
             self.next_bowler = self.get_next_bowler(current_bowler_index)
             self.ui.current_bowler.setText(self.next_bowler.get_name())
@@ -297,5 +317,6 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     mainapp = ControlMainWindow()
     intro = ControlStartWidget()
+    winner = ControlGameOverWidget()
     intro.show()
     sys.exit(app.exec_())
