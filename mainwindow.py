@@ -42,7 +42,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
-        self.current_winner.setText(QtGui.QApplication.translate("MainWindow", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))
+        self.current_winner.setText(QtGui.QApplication.translate("MainWindow", "BOWLATRON 3000", None, QtGui.QApplication.UnicodeUTF8))
         self.current_bowler.setText(QtGui.QApplication.translate("MainWindow", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))
         self.button_bowl.setText(QtGui.QApplication.translate("MainWindow", "Bowl!", None, QtGui.QApplication.UnicodeUTF8))
 
