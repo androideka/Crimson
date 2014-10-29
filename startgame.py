@@ -181,7 +181,6 @@ class ControlMainWindow(QtGui.QMainWindow):
         strike_spare_or_open = self.next_bowler.bowl(pins_left)
         self.update_score(current_bowler_index)
         if current_bowler_index == len(bowlers) - 1 and current_bowler.current_frame == 12:
-            print 'hey. game\'s over.'
             winning_score = 0
             winning_bowler = ''
             for bowler_index, bowler in self.bowlers.iteritems():
