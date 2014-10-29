@@ -15,3 +15,5 @@ Your Task:
 Using your design, implement (in the programming language of your choosing) the scoring / game state display service that would compute needed data that one typically expects to see on the lane monitor during a game.
 
 Might (didn't test on a computer I wasn't developing on) require installing PySide:  sudo apt-get install pyside-tools
+
+Run startgame.py to begin application.
