@@ -168,7 +168,7 @@ class ControlMainWindow(QtGui.QMainWindow):
         current_bowler = self.bowlers[current_bowler_index]
 
         if current_bowler.get_name() == 'Matt':
-            skill_level = 2
+            skill_level = 0
         else:
             skill_level = 10
 
@@ -180,7 +180,8 @@ class ControlMainWindow(QtGui.QMainWindow):
 
         strike_spare_or_open = self.next_bowler.bowl(pins_left)
         self.update_score(current_bowler_index)
-        if current_bowler_index == len(bowlers) - 1 and current_bowler.current_frame == 12:
+        if current_bowler_index == len(bowlers) - 1 and current_bowler.current_frame == 12 and len(bowlers) != 1\
+                or len(bowlers) == 1 and current_bowler.current_frame > 13:
             winning_score = 0
             winning_bowler = ''
             for bowler_index, bowler in self.bowlers.iteritems():
