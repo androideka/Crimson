@@ -188,7 +188,6 @@ class ControlMainWindow(QtGui.QMainWindow):
                 if bowler.get_total_score() > winning_score:
                     winning_score = bowler.get_total_score()
                     winning_bowler = bowler.get_name()
-                    print winning_bowler + str(winning_score)
             winner.ui.label_2.setText('Congratulations, ' + str(winning_bowler) + '!!! You\ve won the game!')
             winner.show()
             mainapp.hide()
