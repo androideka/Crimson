@@ -17,3 +17,5 @@ Using your design, implement (in the programming language of your choosing) the 
 Might (didn't test on a computer I wasn't developing on) require installing PySide:  sudo apt-get install pyside-tools
 
 Run startgame.py to begin application.
+
+WOOOOOOO!!! Got the job. 
